@@ -1,69 +1,78 @@
+"use client";
+
 import React from 'react';
-import { FaFacebookF, FaInstagram, FaPhoneAlt, FaRegCompass, FaTiktok } from 'react-icons/fa';
+import { FaFacebookF, FaInstagram, FaPhoneAlt, FaRegCompass } from 'react-icons/fa';
 
 const Footer = () => {
   return (
-    <footer className="w-full bg-black text-white pt-10 pb-10 border-t border-brand-yellow/20 font-sans">
+    <footer className="w-full bg-black text-white pt-16 pb-10 border-t border-brand-yellow/20 font-sans">
       <div className="max-w-6xl mx-auto px-6">
         
-        {/* Üst Kısım: 3 Sütunlu Bilgi Alanı */}
-        <div className="grid grid-cols-1 md:grid-cols-3 border border-brand-yellow/30 rounded-sm">
+        {/* 3 Sütunlu Yapı: Mobilde dikey, masaüstünde yatay */}
+        <div className="grid grid-cols-1 md:grid-cols-3 border border-brand-yellow/30 rounded-sm divide-y md:divide-y-0 md:divide-x divide-brand-yellow/30">
           
           {/* 1. Sütun: Açılış Saatleri */}
-          <div className="flex items-center p-8 border-b md:border-b-0 md:border-r border-brand-yellow/30">
-            <div className="text-brand-yellow text-3xl mr-6">
+          <div className="flex items-center p-6 md:p-8">
+            <div className="text-brand-yellow text-2xl md:text-3xl mr-6">
               <FaPhoneAlt />
             </div>
             <div>
-              <h4 className="text-lg font-bold mb-1 tracking-tight">Açılış Saatleri</h4>
-              <p className="text-gray-400 font-mono text-sm tracking-widest">08.30 – 01.00</p>
+              <h4 className="text-sm md:text-lg font-bold mb-1 tracking-tight">Açılış Saatleri</h4>
+              <p className="text-gray-400 font-mono text-xs md:text-sm tracking-widest">08.30 – 01.00</p>
             </div>
           </div>
 
-          {/* 2. Sütun: Adres Bilgisi */}
-          <div className="flex items-center p-8 border-b md:border-b-0 md:border-r border-brand-yellow/30">
-            <div className="text-brand-yellow text-3xl mr-6">
-              <FaRegCompass />
-            </div>
-            <div>
-              <p className="text-gray-400 text-sm leading-relaxed">
-                Bla bla Mah, bla bla sokak, Parkora AVM<br />
-                <span className="font-bold text-white tracking-wide">Nilüfer / BURSA</span>
-              </p>
-            </div>
-          </div>
+{/* 2. Sütun: Adres ve Harita Bilgisi */}
+<div className="flex flex-col p-6 md:p-8 space-y-4">
+  <div className="flex items-start">
+    <div className="text-brand-yellow text-2xl md:text-3xl mr-6 mt-1">
+      <FaRegCompass />
+    </div>
+    <div>
+      <p className="text-gray-400 text-xs md:text-sm leading-relaxed">
+        Odunluk Mah. Akpınar Cd. J blok 12J/11<br />
+        Parkora AVM <span className="font-bold text-white tracking-wide">Nilüfer / BURSA</span>
+      </p>
+    </div>
+  </div>
+  
+  {/* Küçük Harita Embed */}
+  <div className="w-full h-32 rounded-lg overflow-hidden grayscale hover:grayscale-0 transition-all duration-500 border border-white/5">
+    <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d97501.0973497623!2d28.87113200853906!3d40.211080643641054!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14ca15505d3b9b9b%3A0xd3901b7c48c8c6a8!2sBurgo%20Jr.!5e0!3m2!1str!2str!4v1772888714174!5m2!1str!2str"
+        width="100%" 
+        height="100%" 
+        style={{ border: 0 }} 
+        allowFullScreen={true} 
+        loading="lazy"> 
+    </iframe>
+  </div>
+</div>
 
           {/* 3. Sütun: Sosyal Medya */}
           <div className="flex items-center justify-center p-8 space-x-10">
             <a 
               href="https://www.facebook.com/p/BURGO-JR-61556004706178/" 
-              target='blank'
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-gray-400 hover:text-brand-yellow transition-all duration-300 transform hover:scale-110 text-2xl"
             >
               <FaFacebookF />
             </a>
             <a 
               href="https://www.instagram.com/burgo_jr/?hl=en" 
-              target='blank'
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-gray-400 hover:text-brand-yellow transition-all duration-300 transform hover:scale-110 text-2xl"
             >
               <FaInstagram />
             </a>
-            {/*
-            <a 
-              href="#" 
-              target='blank'
-              className="text-gray-400 hover:text-brand-yellow transition-all duration-300 transform hover:scale-110 text-2xl"
-            >
-              <FaTiktok />
-            </a>
-            */}
           </div>
         </div>
 
-        {/* Alt Kısım: Telif Hakkı */}
+        {/* Telif Hakkı */}
         <div className="mt-12 text-center">
-          <p className="text-[10px] md:text-xs tracking-[0.4em] font-black uppercase text-gray-500">
+          <p className="text-[10px] md:text-xs tracking-[0.2em] md:tracking-[0.4em] font-black uppercase text-gray-500">
             © 2026 <span className="text-brand-yellow">BURGO Jr.</span> - TÜM HAKLARI SAKLIDIR
           </p>
         </div>

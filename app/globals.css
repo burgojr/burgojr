@@ -51,11 +51,16 @@ html {
   }
 }
 @media (max-width: 768px) {
-  /* reCAPTCHA badge'ini mobil cihazlarda navigasyonun üstüne çıkmayacak şekilde konumlandırır */
-  .grecaptcha-badge {
-    bottom: 85px !important;
-  }
-  
+/* reCAPTCHA badge'ini %70 oranında küçültür ve sağa yaslar */
+.grecaptcha-badge { 
+  transform: scale(0.75); /* Boyutu %75'e indirir */
+  transition: all 0.3s ease;
+}
+
+/* Üzerine gelindiğinde (hover) veya mobilde tıklandığında hafifçe büyümesini istersen */
+.grecaptcha-badge:hover {
+  transform: scale(0.85);
+}
   /* Mobilde fontların çok küçük olup okunurluğunu yitirmesini engeller */
   html {
     font-size: 14px;

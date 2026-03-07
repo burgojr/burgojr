@@ -1,19 +1,8 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
 import { Poppins } from 'next/font/google';
+import "./globals.css";
 import ScrollToTop from "./components/ScrollToTop";
 import { Providers } from "./provider";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -23,7 +12,29 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: "Burgo Jr. | Franchise Başvuru",
-  description: "Burgo Jr. ailesine katılmak için franchise başvuru formunu doldurun.",
+  description: "Burgo Jr. ailesine katılmak için franchise başvuru formunu doldurun ve lezzetli bir yatırıma adım atın.",
+  keywords: ["Burgo Jr.", "Franchise", "Hamburger Bayilik", "Yatırım", "Gıda Bayiliği"],
+  authors: [{ name: "Burgo Jr." }],
+  openGraph: {
+    title: "Burgo Jr. | Franchise Başvuru",
+    description: "Burgo Jr. ailesine katılmak için franchise başvuru formunu doldurun ve lezzetli bir yatırıma adım atın.",
+    url: "https://burgojr.vercel.app",
+    siteName: "Burgo Jr.",
+images: [
+  {
+    url: "/images/logo/og-image.jpg", // public/images/logo/og-image.jpg şeklinde olmalı
+    width: 1200,
+    height: 630,
+    alt: "Burgo Jr. Franchise",
+  },
+],
+    locale: "tr_TR",
+    type: "website",
+  },
+icons: {
+    // '/favicon.ico' yerine kendi logonun yolunu yazıyoruz
+    icon: "/images/logo/BURGO.svg", 
+  },
 };
 
 export default function RootLayout({
@@ -33,8 +44,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="tr">
-      <body className={`${poppins.className}`} suppressHydrationWarning={true}>
-        {/* v3 Provider sarmalaması */}
+      <head>
+        {/* İstersen buraya Google Analytics kodunu ekleyebilirsin */}
+      </head>
+      <body className={`${poppins.variable} font-sans`} suppressHydrationWarning={true}>
         <Providers>
           {children}
         </Providers>

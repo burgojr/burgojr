@@ -36,28 +36,26 @@ const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => 
   };
 
   return (
-// Header.tsx içindeki ilgili kısımları şu şekilde güncelle:
-
 <header 
   className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ${
-    isScrolled ? 'bg-black/95 backdrop-blur-md py-2' : 'bg-transparent py-4'
+    isScrolled ? 'bg-black/95 backdrop-blur-md' : 'bg-transparent py-6'
   }`}
 >
   <div className="max-w-7xl mx-auto px-4 flex flex-col items-center justify-between">
     
-    {/* Logo - Mobilde daha kompakt boyutlar */}
+    {/* Logo - Boyutlar %20-30 oranında büyütüldü */}
     <Link href="/" onClick={scrollToTop} className="flex items-center">
       <img 
         src="/images/logo/BURGO.svg" 
         alt="Burgo Logo" 
         className={`transition-all duration-500 ${
-          isScrolled ? 'h-10 md:h-20' : 'h-14 md:h-30' // Mobilde 10 ve 14h yaptık
-        } w-auto object-contain mb-2 md:mb-0`}
+          isScrolled ? 'h-14 md:h-24' : 'h-20 md:h-36' 
+        } w-auto object-contain`}
       />
     </Link>
 
-    {/* Navigasyon - Mobilde daha okunaklı aralıklar */}
-    <nav className="flex flex-row items-center justify-center gap-3 md:gap-12 px-2">
+    {/* Navigasyon - Yazılar ve aralıklar büyütüldü */}
+    <nav className="flex flex-row items-center justify-center gap-5 sm:gap-8 md:gap-14 px-2">
       {[
         { name: 'NEDEN BURGO Jr.', id: 'neden-burgo' },
         { name: 'FRANCHISE', id: 'bize-katilin' },
@@ -67,7 +65,12 @@ const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => 
           key={item.id} 
           href={`#${item.id}`}
           onClick={(e) => scrollToSection(e, item.id)}
-          className="text-white/90 hover:text-[#d4a017] text-[9px] sm:text-[10px] md:text-xs font-black tracking-tighter sm:tracking-widest transition-colors cursor-pointer whitespace-nowrap border-b border-transparent hover:border-[#d4a017] pb-1"
+          className="text-white/90 hover:text-[#d4a017] 
+                     text-[12px] sm:text-sm md:text-base 
+                     font-black tracking-tight sm:tracking-widest 
+                     transition-all duration-300 cursor-pointer 
+                     whitespace-nowrap border-b-2 border-transparent 
+                     hover:border-[#d4a017] pb-1 uppercase"
         >
           {item.name}
         </a>
