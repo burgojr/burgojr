@@ -21,29 +21,37 @@ const scrollToTop = (e: React.MouseEvent<HTMLAnchorElement>) => {
   };
 
 const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
-    e.preventDefault();
-    const element = document.getElementById(id);
-    if (element) {
-      const offset = 140; 
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
+  e.preventDefault();
+  const element = document.getElementById(id);
+  
+  // Header'ı bul (veya sınıf ismine göre seç)
+  const header = document.querySelector('header');
+  
+  if (element) {
+    // Header varsa yüksekliğini al, yoksa varsayılan bir değer (örn: 80) kullan
+    const headerOffset = header ? header.offsetHeight : 80;
+    
+    // Ekstra bir boşluk daha bırakmak istersen buraya ekle (örn: + 20)
+    const offset = headerOffset + 20; 
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
-    }
-  };
+    const elementPosition = element.getBoundingClientRect().top;
+    const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth'
+    });
+  }
+};
 
   return (
 <header 
   className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ${
-    isScrolled ? 'bg-black/95 backdrop-blur-md' : 'bg-transparent py-6'
+    isScrolled ? 'bg-black/55 backdrop-blur-md py-3' : 'bg-transparent py-6'
   }`}
 >
-  <div className="max-w-7xl mx-auto px-4 flex flex-col items-center justify-between">
+  <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between">
     
-    {/* Logo - Boyutlar %20-30 oranında büyütüldü */}
     <Link href="/" onClick={scrollToTop} className="flex items-center">
       <img 
         src="/images/logo/BURGO.svg" 

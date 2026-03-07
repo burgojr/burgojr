@@ -29,10 +29,10 @@ const JoinUsSection = () => {
           viewport={{ once: false, amount: 0.3 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <p className="text-brand-yellow italic text-xl md:text-4xl mb-1 md:mb-2">
+          <p className="text-brand-yellow italic text-2xl md:text-4xl mb-1 md:mb-2">
             Bize
           </p>
-          <h2 className="text-white text-5xl md:text-8xl font-black uppercase tracking-tighter mb-8 md:mb-12">
+          <h2 className="text-white text-4xl md:text-6xl font-black uppercase tracking-tighter mb-8 md:mb-12">
             KATILIN
           </h2>
         </motion.div>

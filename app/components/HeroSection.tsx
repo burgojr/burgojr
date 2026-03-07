@@ -29,12 +29,12 @@ const HeroSection = () => {
 
   {/* İçerik */}
   <div className="relative z-10 text-center px-6 w-full">
-    <p className="text-brand-yellow italic text-xl md:text-3xl mb-1 md:mb-2 tracking-wide drop-shadow-lg">
+    <p className="text-brand-yellow italic text-2xl md:text-4xl mb-1 md:mb-2 tracking-wide drop-shadow-lg">
       Şubemiz Olun
     </p>
 
     {/* Başlık mobilde 5xl, tablette 7xl, masaüstünde 9xl olacak şekilde ayarlandı */}
-    <h1 className="text-white text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter uppercase leading-tight md:leading-none drop-shadow-2xl">
+    <h1 className="text-white text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter uppercase leading-tight md:leading-none drop-shadow-2xl">
       FRANCHISE
     </h1>
 

@@ -16,7 +16,7 @@ const WhyBurgoSection = () => {
           viewport={{ once: false, amount: 0.5 }}
           transition={{ duration: 0.7 }}
         >
-          <h2 id='neden-burgo'className="text-brand-yellow text-3xl md:text-5xl font-bold tracking-[0.2em] italic uppercase">
+          <h2 id='neden-burgo'className="text-brand-yellow text-4xl md:text-6xl font-bold tracking-[0.2em] italic uppercase">
             NEDEN BURGO Jr. ?
           </h2>
           <div className="h-1 w-20 bg-brand-yellow mx-auto mt-6" />
