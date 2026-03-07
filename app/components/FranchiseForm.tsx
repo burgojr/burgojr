@@ -121,27 +121,27 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <label className="text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Adınız Soyadınız</label>
-              <input name="full_name" required type="text" className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-white focus:border-brand-yellow outline-none transition-all" placeholder="Örn: Ahmet Yılmaz" />
+              <input name="full_name" required type="text" className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-white focus:border-brand-yellow outline-none transition-all placeholder:text-xs md:placeholder:text-sm" placeholder="Örn: Ahmet Yılmaz" />
             </div>
 
             <div className="space-y-2">
               <label className="text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">E-Posta Adresi</label>
-              <input name="email" required type="email" className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-white focus:border-brand-yellow outline-none transition-all" placeholder="ahmet@mail.com" />
+              <input name="email" required type="email" className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-white focus:border-brand-yellow outline-none transition-all placeholder:text-xs md:placeholder:text-sm" placeholder="ahmet@mail.com" />
             </div>
 
             <div className="space-y-2">
               <label className="text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Telefon</label>
-              <input name="phone" required type="tel" className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-white focus:border-brand-yellow outline-none transition-all" placeholder="05xx xxx xx xx" />
+              <input name="phone" required type="tel" className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-white focus:border-brand-yellow outline-none transition-all placeholder:text-xs md:placeholder:text-sm" placeholder="05xx xxx xx xx" />
             </div>
 
             <div className="space-y-2">
               <label className="text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Yatırım Yapılacak Şehir</label>
-              <input name="city" required type="text" className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-white focus:border-brand-yellow outline-none transition-all" placeholder="Örn: İzmir" />
+              <input name="city" required type="text" className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-white focus:border-brand-yellow outline-none transition-all placeholder:text-xs md:placeholder:text-sm" placeholder="Örn: İzmir" />
             </div>
 
             <div className="space-y-2">
               <label className="text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Yatırım Bütçesi</label>
-              <select name="investment_amount" className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-gray-400 focus:border-brand-yellow outline-none transition-all appearance-none cursor-pointer">
+              <select name="investment_amount" className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-gray-400 focus:border-brand-yellow outline-none transition-all appearance-none cursor-pointer text-xs md:text-sm">
                 <option value="" className="bg-black">Bütçe Aralığı Seçiniz</option>
                 <option value="1M-2.5M" className="bg-black text-white">1.000.000 TL - 2.500.000 TL</option>
                 <option value="2.5M-5M" className="bg-black text-white">2.500.000 TL - 5.000.000 TL</option>
@@ -151,7 +151,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
             <div className="space-y-2">
               <label className="text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Konsept Tercihi</label>
-              <select name="concept_type" className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-gray-400 focus:border-brand-yellow outline-none transition-all appearance-none cursor-pointer">
+              <select name="concept_type" className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-gray-400 focus:border-brand-yellow outline-none transition-all appearance-none cursor-pointer text-xs md:text-sm">
                 <option value="" className="bg-black">Konsept Türünüzü Seçiniz</option>
                 <option value="alkollü" className="bg-black text-white">Alkollü</option>
                 <option value="alkolsüz" className="bg-black text-white">Alkolsüz</option>
@@ -160,7 +160,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
             <div className="md:col-span-2 space-y-2">
               <label className="text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Eklemek İstediğiniz Notlar</label>
-              <textarea name="message" rows={4} className="w-full bg-white/5 border border-white/10 rounded-[30px] py-5 px-8 text-white focus:border-brand-yellow outline-none transition-all resize-none" placeholder="Mesajınız..."></textarea>
+              <textarea name="message" rows={4} className="w-full bg-white/5 border border-white/10 rounded-[30px] py-5 px-8 text-white focus:border-brand-yellow outline-none transition-all resize-none placeholder:text-xs md:placeholder:text-sm" placeholder="Mesajınız..."></textarea>
             </div>
 
             <div className="md:col-span-2 flex items-center space-x-3 px-4 md:px-4 py-2">
