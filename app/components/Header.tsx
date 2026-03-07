@@ -49,7 +49,7 @@ const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => 
         src="/images/logo/BURGO.svg" 
         alt="Burgo Logo" 
         className={`transition-all duration-500 ${
-          isScrolled ? 'h-14 md:h-24' : 'h-20 md:h-36' 
+          isScrolled ? 'h-14 md:h-24' : 'h-20 md:h-28' 
         } w-auto object-contain`}
       />
     </Link>
@@ -66,7 +66,7 @@ const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => 
           href={`#${item.id}`}
           onClick={(e) => scrollToSection(e, item.id)}
           className="text-white/90 hover:text-[#d4a017] 
-                     text-[12px] sm:text-sm md:text-base 
+                     text-[10px] sm:text-sm md:text-base 
                      font-black tracking-tight sm:tracking-widest 
                      transition-all duration-300 cursor-pointer 
                      whitespace-nowrap border-b-2 border-transparent 
