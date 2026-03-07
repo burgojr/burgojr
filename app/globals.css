@@ -50,6 +50,17 @@ html {
     --foreground: #ededed;
   }
 }
+@media (max-width: 768px) {
+  /* reCAPTCHA badge'ini mobil cihazlarda navigasyonun üstüne çıkmayacak şekilde konumlandırır */
+  .grecaptcha-badge {
+    bottom: 85px !important;
+  }
+  
+  /* Mobilde fontların çok küçük olup okunurluğunu yitirmesini engeller */
+  html {
+    font-size: 14px;
+  }
+}
 
 body {
   background: var(--background);
