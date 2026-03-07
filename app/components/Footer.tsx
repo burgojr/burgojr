@@ -8,7 +8,7 @@ const Footer = () => {
     <footer className="w-full bg-black text-white pt-16 pb-10 border-t border-brand-yellow/20 font-sans">
       <div className="max-w-6xl mx-auto px-6">
         
-        {/* 3 Sütunlu Yapı: Mobilde dikey, masaüstünde yatay */}
+        {/* 3 Sütunlu Yapı */}
         <div className="grid grid-cols-1 md:grid-cols-3 border border-brand-yellow/30 rounded-sm divide-y md:divide-y-0 md:divide-x divide-brand-yellow/30">
           
           {/* 1. Sütun: Açılış Saatleri */}
@@ -22,39 +22,41 @@ const Footer = () => {
             </div>
           </div>
 
-{/* 2. Sütun: Adres ve Harita Bilgisi */}
-<div className="flex flex-col p-6 md:p-8 space-y-4">
-  <div className="flex items-start">
-    <div className="text-brand-yellow text-2xl md:text-3xl mr-6 mt-1">
-      <FaRegCompass />
-    </div>
-    <div>
-      <p className="text-gray-400 text-xs md:text-sm leading-relaxed">
-        Odunluk Mah. Akpınar Cd. J blok 12J/11<br />
-        Parkora AVM <span className="font-bold text-white tracking-wide">Nilüfer / BURSA</span>
-      </p>
-    </div>
-  </div>
-  
-  {/* Küçük Harita Embed */}
-  <div className="w-full h-32 rounded-lg overflow-hidden grayscale hover:grayscale-0 transition-all duration-500 border border-white/5">
-    <iframe 
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d97501.0973497623!2d28.87113200853906!3d40.211080643641054!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14ca15505d3b9b9b%3A0xd3901b7c48c8c6a8!2sBurgo%20Jr.!5e0!3m2!1str!2str!4v1772888714174!5m2!1str!2str"
-        width="100%" 
-        height="100%" 
-        style={{ border: 0 }} 
-        allowFullScreen={true} 
-        loading="lazy"> 
-    </iframe>
-  </div>
-</div>
+          {/* 2. Sütun: Adres ve Harita Bilgisi */}
+          <div className="flex flex-col p-6 md:p-8 space-y-4">
+            <div className="flex items-start">
+              <div className="text-brand-yellow text-2xl md:text-3xl mr-6 mt-1">
+                <FaRegCompass />
+              </div>
+              <div>
+                <p className="text-gray-400 text-xs md:text-sm leading-relaxed">
+                  Odunluk Mah. Akpınar Cd. J blok 12J/11<br />
+                  Parkora AVM <span className="font-bold text-white tracking-wide">Nilüfer / BURSA</span>
+                </p>
+              </div>
+            </div>
+            
+            {/* Harita Embed - Title eklendi */}
+            <div className="w-full h-32 rounded-lg overflow-hidden grayscale hover:grayscale-0 transition-all duration-500 border border-white/5">
+              <iframe 
+                src="https://www.google.com/maps/embed?..." // Buraya gerçek embed kodunuzu yapıştırın
+                title="Burgo Jr. Konum Haritası"
+                width="100%" 
+                height="100%" 
+                style={{ border: 0 }} 
+                allowFullScreen={true} 
+                loading="lazy"> 
+              </iframe>
+            </div>
+          </div>
 
-          {/* 3. Sütun: Sosyal Medya */}
+          {/* 3. Sütun: Sosyal Medya - Aria-label'lar eklendi */}
           <div className="flex items-center justify-center p-8 space-x-10">
             <a 
               href="https://www.facebook.com/p/BURGO-JR-61556004706178/" 
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Facebook Sayfamız"
               className="text-gray-400 hover:text-brand-yellow transition-all duration-300 transform hover:scale-110 text-2xl"
             >
               <FaFacebookF />
@@ -63,6 +65,7 @@ const Footer = () => {
               href="https://www.instagram.com/burgo_jr/?hl=en" 
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Instagram Sayfamız"
               className="text-gray-400 hover:text-brand-yellow transition-all duration-300 transform hover:scale-110 text-2xl"
             >
               <FaInstagram />

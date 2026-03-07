@@ -111,27 +111,27 @@ const FranchiseForm = () => {
         ) : (
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             <div className="space-y-1.5 md:space-y-2">
-              <label className="text-[10px] md:text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Adınız Soyadınız</label>
-              <input name="full_name" required type="text" className="w-full bg-white/5 border border-white/10 rounded-full py-3.5 md:py-4 px-6 text-white focus:border-brand-yellow outline-none transition-all text-sm md:text-base" placeholder="Örn: Ahmet Yılmaz" />
+              <label htmlFor='full_name' className="text-[10px] md:text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Adınız Soyadınız</label>
+              <input id='full_name' name="full_name" required type="text" className="w-full bg-white/5 border border-white/10 rounded-full py-3.5 md:py-4 px-6 text-white focus:border-brand-yellow outline-none transition-all text-sm md:text-base" placeholder="Örn: Ahmet Yılmaz" />
             </div>
 
             <div className="space-y-1.5 md:space-y-2">
-              <label className="text-[10px] md:text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">E-Posta Adresi</label>
-              <input name="email" required type="email" className="w-full bg-white/5 border border-white/10 rounded-full py-3.5 md:py-4 px-6 text-white focus:border-brand-yellow outline-none transition-all text-sm md:text-base" placeholder="ahmet@mail.com" />
+              <label htmlFor='email' className="text-[10px] md:text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">E-Posta Adresi</label>
+              <input id='email' name="email" required type="email" className="w-full bg-white/5 border border-white/10 rounded-full py-3.5 md:py-4 px-6 text-white focus:border-brand-yellow outline-none transition-all text-sm md:text-base" placeholder="ahmet@mail.com" />
             </div>
 
             <div className="space-y-1.5 md:space-y-2">
-              <label className="text-[10px] md:text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Telefon</label>
-              <input name="phone" required type="tel" className="w-full bg-white/5 border border-white/10 rounded-full py-3.5 md:py-4 px-6 text-white focus:border-brand-yellow outline-none transition-all text-sm md:text-base" placeholder="05xx xxx xx xx" />
+              <label htmlFor='phone' className="text-[10px] md:text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Telefon</label>
+              <input id='phone' name="phone" required type="tel" className="w-full bg-white/5 border border-white/10 rounded-full py-3.5 md:py-4 px-6 text-white focus:border-brand-yellow outline-none transition-all text-sm md:text-base" placeholder="05xx xxx xx xx" />
             </div>
 
             <div className="space-y-1.5 md:space-y-2">
-              <label className="text-[10px] md:text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Yatırım Yapılacak Şehir</label>
-              <input name="city" required type="text" className="w-full bg-white/5 border border-white/10 rounded-full py-3.5 md:py-4 px-6 text-white focus:border-brand-yellow outline-none transition-all text-sm md:text-base" placeholder="Örn: İzmir" />
+              <label htmlFor='city' className="text-[10px] md:text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Yatırım Yapılacak Şehir</label>
+              <input id='city' name="city" required type="text" className="w-full bg-white/5 border border-white/10 rounded-full py-3.5 md:py-4 px-6 text-white focus:border-brand-yellow outline-none transition-all text-sm md:text-base" placeholder="Örn: İzmir" />
             </div>
 
             <div className="space-y-1.5 md:space-y-2">
-              <label className="text-[10px] md:text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Yatırım Bütçesi</label>
+              <label htmlFor="investment_amount" className="text-[10px] md:text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Yatırım Bütçesi</label>
               <select name="investment_amount" className="w-full bg-white/5 border border-white/10 rounded-full py-3.5 md:py-4 px-6 text-gray-400 focus:border-brand-yellow outline-none transition-all appearance-none cursor-pointer text-sm md:text-base">
                 <option value="" className="bg-black">Bütçe Aralığı Seçiniz</option>
                 <option value="1M-2.5M" className="bg-black text-white">1M - 2.5M TL</option>
@@ -141,8 +141,8 @@ const FranchiseForm = () => {
             </div>
 
             <div className="space-y-1.5 md:space-y-2">
-              <label className="text-[10px] md:text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Konsept Tercihi</label>
-              <select name="concept_type" className="w-full bg-white/5 border border-white/10 rounded-full py-3.5 md:py-4 px-6 text-gray-400 focus:border-brand-yellow outline-none transition-all appearance-none cursor-pointer text-sm md:text-base">
+              <label htmlFor='concept_type' className="text-[10px] md:text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Konsept Tercihi</label>
+              <select id='concept_type'  name="concept_type" className="w-full bg-white/5 border border-white/10 rounded-full py-3.5 md:py-4 px-6 text-gray-400 focus:border-brand-yellow outline-none transition-all appearance-none cursor-pointer text-sm md:text-base">
                 <option value="" className="bg-black">Konsept Türünü Seçiniz</option>
                 <option value="alkollü" className="bg-black text-white">Alkollü</option>
                 <option value="alkolsüz" className="bg-black text-white">Alkolsüz</option>
@@ -150,8 +150,8 @@ const FranchiseForm = () => {
             </div>
 
             <div className="md:col-span-2 space-y-1.5 md:space-y-2">
-              <label className="text-[10px] md:text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Eklemek İstediğiniz Notlar</label>
-              <textarea name="message" rows={3} className="w-full bg-white/5 border border-white/10 rounded-[24px] md:rounded-[30px] py-4 md:py-5 px-6 md:px-8 text-white focus:border-brand-yellow outline-none transition-all resize-none text-sm md:text-base" placeholder="Mesajınız..."></textarea>
+              <label htmlFor='message' className="text-[10px] md:text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Eklemek İstediğiniz Notlar</label>
+              <textarea id='message' name="message" rows={3} className="w-full bg-white/5 border border-white/10 rounded-[24px] md:rounded-[30px] py-4 md:py-5 px-6 md:px-8 text-white focus:border-brand-yellow outline-none transition-all resize-none text-sm md:text-base" placeholder="Mesajınız..."></textarea>
             </div>
 
             <div className="md:col-span-2 flex items-start space-x-3 px-2 md:px-4 py-2">

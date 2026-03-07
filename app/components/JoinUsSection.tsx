@@ -55,9 +55,9 @@ const JoinUsSection = () => {
           {/* SOLA HİZALI KISIM */}
           <div className="w-full max-w-3xl px-2 md:px-4 flex flex-col items-start text-left">
             
-            <h4 className="text-white font-bold text-base md:text-xl mb-6 md:mb-8 tracking-tight">
+            <h3 className="text-white font-bold text-base md:text-xl mb-6 md:mb-8 tracking-tight">
               Marka, işletmecilerine yalnızca bir isim hakkı değil aynı zamanda:
-            </h4>
+            </h3>
             
             {/* Madde İşaretleri - Mobilde tek sütun, daha kompakt */}
             <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 md:gap-y-5 w-full">
