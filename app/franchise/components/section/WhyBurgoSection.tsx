@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from 'framer-motion';
-import ScrollLine from './ScrollLine'; 
+import ScrollLine from '../ScrollLine'; 
 
 const WhyBurgoSection = () => {
   return (

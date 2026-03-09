@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from 'next/font/google';
 import "./globals.css";
-import ScrollToTop from "./components/ScrollToTop";
+import ScrollToTop from "./franchise/components/ScrollToTop";
 import { Providers } from "./provider";
 
 const poppins = Poppins({

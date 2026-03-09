@@ -1,13 +1,13 @@
 "use client";
 
-import HeroSection from './components/HeroSection';
-import WhyBurgoSection from './components/WhyBurgoSection';
-import JoinUsSection from './components/JoinUsSection'; // Yeni eklediğimiz bölüm
-import FranchiseForm from './components/FranchiseForm';
-import Footer from './components/Footer';
-import ScrollToTop from './components/ScrollToTop';
-import Header from './components/Header';
-import SocialMedia from './components/SocialMedia';
+import HeroSection from './franchise/components/section/HeroSection';
+import WhyBurgoSection from './franchise/components/section/WhyBurgoSection';
+import JoinUsSection from './franchise/components/section/JoinUsSection'; // Yeni eklediğimiz bölüm
+import FranchiseForm from './franchise/components/section/FranchiseForm';
+import Footer from './franchise/components/section/Footer';
+import ScrollToTop from './franchise/components/ScrollToTop';
+import Header from './franchise/components/section/Header';
+import SocialMedia from './franchise/components/section/SocialMedia';
 
 export default function FranchisePage() {
   return (

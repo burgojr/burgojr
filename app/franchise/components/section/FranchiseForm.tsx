@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Send } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
-import KVKKModal from './KVKKModal';
+import KVKKModal from '../modal/KVKKModal';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { Country, State, City } from 'country-state-city';
 

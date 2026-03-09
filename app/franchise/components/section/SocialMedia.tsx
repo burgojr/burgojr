@@ -1,5 +1,5 @@
 import { Instagram, Facebook } from 'lucide-react';
-import ScrollLine from './ScrollLine';
+import ScrollLine from '../ScrollLine';
 
 const socialLinks = [
   { name: 'Instagram', icon: <Instagram size={32} />, url: 'https://www.instagram.com/burgo_jr/?hl=en', handle: '@burgo_jr' },

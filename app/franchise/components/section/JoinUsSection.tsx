@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
-import ScrollLine from './ScrollLine'; 
+import ScrollLine from '../ScrollLine'; 
 
 const JoinUsSection = () => {
   const benefits = [
