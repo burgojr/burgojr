@@ -91,6 +91,9 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       setIsKvkkChecked(false);
       setMinBudget(""); 
       setMaxBudget("");
+      setSelectedCountry("TR"); // Ülkeyi başa al
+      setSelectedCity("");      // Şehri sıfırla
+      setSelectedDistrict("");  // İlçeyi sıfırla
 
     } catch (error: any) {
       console.error("Form Hatası:", error);
@@ -152,7 +155,15 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
               Bilgileriniz ekibimize ulaştı. En kısa sürede sizinle iletişime geçeceğiz.
             </p>
             <button 
-              onClick={() => setIsSubmitted(false)}
+              onClick={() => {
+                setIsSubmitted(false);
+                setSelectedCountry("TR");
+                setSelectedCity("");
+                setSelectedDistrict("");
+                const initialStates = State.getStatesOfCountry("TR");
+                setStates(initialStates);
+                setDistricts([]);
+              }}
               className="mt-8 text-brand-yellow underline text-sm hover:text-white"
             >
               Yeni Form Gönder

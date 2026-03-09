@@ -49,10 +49,10 @@ export async function POST(request: Request) {
       html: `
         <div style="font-family: sans-serif; max-width: 600px; border: 1px solid #eee; padding: 20px; border-radius: 12px; color: #333;">
           <h2 style="color: #fdbf1f; text-transform: uppercase; margin-bottom: 5px;">🍔 Yeni Franchise Başvurusu</h2>
-          <p style="color: #666; font-size: 14px; margin-top: 0;">Web sitesi üzerinden yeni bir aday formu iletildi.</p>
+          <p style="color: #666; font-size: 14px; margin-top: 0;">Web sitesi üzerinden yeni bir franchise başvuru formu iletildi.</p>
           <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
           
-          <h3 style="font-size: 16px; color: #fdbf1f;">👤 Aday Bilgileri</h3>
+          <h3 style="font-size: 16px; color: #fdbf1f;">👤 Başvuru Bilgileri</h3>
           <table style="width: 100%; font-size: 14px; border-collapse: collapse;">
             <tr><td style="padding: 5px 0; width: 120px;"><strong>Ad Soyad:</strong></td><td>${full_name}</td></tr>
             <tr><td style="padding: 5px 0;"><strong>E-posta:</strong></td><td><a href="mailto:${email}" style="color: #007bff; text-decoration: none;">${email}</a></td></tr>
