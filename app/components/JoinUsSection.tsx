@@ -14,7 +14,7 @@ const JoinUsSection = () => {
   ];
 
   return (
-    <section className="w-full flex flex-col items-center pb-24 bg-black font-sans">
+    <section className="w-full flex flex-col items-center bg-black font-sans">
       
       {/* 1. Ara Dikey Çizgi */}
       <div className="mb-1">

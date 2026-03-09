@@ -7,6 +7,7 @@ import FranchiseForm from './components/FranchiseForm';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
 import Header from './components/Header';
+import SocialMedia from './components/SocialMedia';
 
 export default function FranchisePage() {
   return (
@@ -20,11 +21,13 @@ export default function FranchisePage() {
 
       {/* 3. Bölüm: "Bize Katılın" ve Süreç Bilgilendirmesi */}
       <JoinUsSection />
+      {/* 4. Bölüm: Sosyal Medya */}
+      <SocialMedia />
 
-      {/* 4. Bölüm: Aksiyon Alanı (Başvuru Formu) */}
+      {/* 5. Bölüm: Aksiyon Alanı (Başvuru Formu) */}
       <FranchiseForm />
 
-      {/* 5. Bölüm: Kurumsal Kapanış (Footer) */}
+      {/* 6. Bölüm: Kurumsal Kapanış (Footer) */}
       <Footer />
 
       {/* Sayfa her zaman etkileşimde kalsın diye sağ altta duran buton */}

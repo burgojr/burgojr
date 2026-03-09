@@ -64,25 +64,21 @@ const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => 
 
     {/* Navigasyon - Yazılar ve aralıklar büyütüldü */}
     <nav className="flex flex-row items-center justify-center gap-5 sm:gap-8 md:gap-14 px-2">
-      {[
-        { name: 'NEDEN BURGO Jr.', id: 'neden-burgo' },
-        { name: 'FRANCHISE', id: 'bize-katilin' },
-        { name: 'BAŞVURU FORMU', id: 'basvuru-formu' }
-      ].map((item) => (
-        <a 
-          key={item.id} 
-          href={`#${item.id}`}
-          onClick={(e) => scrollToSection(e, item.id)}
-          className="text-white/90 hover:text-[#d4a017] 
-                     text-[10px] sm:text-sm md:text-base 
-                     font-black tracking-tight sm:tracking-widest 
-                     transition-all duration-300 cursor-pointer 
-                     whitespace-nowrap border-b-2 border-transparent 
-                     hover:border-[#d4a017] pb-1 uppercase"
-        >
-          {item.name}
-        </a>
-      ))}
+{[
+  { name: 'NEDEN BURGO', id: 'neden-burgo' },
+  { name: 'FRANCHISE', id: 'bize-katilin' },
+  { name: 'SOSYAL MEDYA', id: 'sosyal-medya' },
+  { name: 'BAŞVURU', id: 'basvuru-formu' }
+].map((item) => (
+  <a 
+    key={item.id} 
+    href={`#${item.id}`}
+    onClick={(e) => scrollToSection(e, item.id)}
+    className="text-[10px] md:text-sm font-black text-white hover:text-[#d4a017] uppercase tracking-wider transition-all duration-300 border-b-2 border-transparent hover:border-[#d4a017] pb-1 cursor-pointer"
+  >
+    {item.name}
+  </a>
+))}
     </nav>
   </div>
 </header>
