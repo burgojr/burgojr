@@ -42,10 +42,9 @@ const Footer = () => {
               </div>
             </div>
             
-            {/* Harita Embed - Title eklendi */}
             <div className="w-full h-32 rounded-lg overflow-hidden grayscale hover:grayscale-0 transition-all duration-500 border border-white/5">
               <iframe 
-                src="https://www.google.com/maps/embed?..." // Buraya gerçek embed kodunuzu yapıştırın
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3046.9093358858454!2d28.996743575633705!3d40.21107967147337!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14ca15505d3b9b9b%3A0xd3901b7c48c8c6a8!2sBurgo%20Jr.!5e0!3m2!1str!2str!4v1773090099944!5m2!1str!2str"
                 title="Burgo Jr. Konum Haritası"
                 width="100%" 
                 height="100%" 
