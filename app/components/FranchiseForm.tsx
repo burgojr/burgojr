@@ -1,76 +1,102 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Send } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import KVKKModal from './KVKKModal';
-import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'; // Değişti: Hook kullanıyoruz
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+import { Country, State, City } from 'country-state-city';
 
 const FranchiseForm = () => {
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isKvkkChecked, setIsKvkkChecked] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  
-  // v3 için gerekli hook
+  const [minBudget, setMinBudget] = useState("");
+  const [maxBudget, setMaxBudget] = useState("");
+  const [currency, setCurrency] = useState("₺");
+
+  // Lokasyon State'leri - Varsayılan Türkiye (TR)
+  const [selectedCountry, setSelectedCountry] = useState("TR");
+  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [countries] = useState(Country.getAllCountries());
+  const [states, setStates] = useState<any[]>([]);
+  const [districts, setDistricts] = useState<any[]>([]);
+
   const { executeRecaptcha } = useGoogleReCaptcha();
 
-const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  
-  // 1. ADIM: Form elementini en başta yakala
-  // e.target yerine currentTarget kullanmak kesin çözümdür.
-  const formElement = e.currentTarget; 
+  // 1. Ülke değişince Şehirleri (States) yükle
+  useEffect(() => {
+    if (selectedCountry) {
+      const fetchedStates = State.getStatesOfCountry(selectedCountry);
+      setStates(fetchedStates);
+      setSelectedCity(""); 
+      setDistricts([]);
+    }
+  }, [selectedCountry]);
 
-  // 2. GÜVENLİK KONTROLLERİ
-  if (!isKvkkChecked) {
-    setIsModalOpen(true);
-    return;
-  }
+  // 2. Şehir değişince İlçeleri (Cities) yükle
+  useEffect(() => {
+    if (selectedCity) {
+      const fetchedDistricts = City.getCitiesOfState(selectedCountry, selectedCity);
+      setDistricts(fetchedDistricts);
+      setSelectedDistrict("");
+    }
+  }, [selectedCity, selectedCountry]);
 
-  if (!executeRecaptcha) {
-    alert("Güvenlik sistemi yüklenmedi, lütfen sayfayı yenileyip tekrar deneyin.");
-    return;
-  }
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formElement = e.currentTarget; 
 
-  setLoading(true);
+    if (!isKvkkChecked) {
+      setIsModalOpen(true);
+      return;
+    }
 
-  try {
-    // 3. ADIM: reCAPTCHA Token al
-    const captchaToken = await executeRecaptcha('franchise_application');
+    if (!executeRecaptcha) {
+      alert("Güvenlik sistemi yüklenmedi, lütfen sayfayı yenileyip tekrar deneyin.");
+      return;
+    }
 
-    // 4. ADIM: Verileri ayıkla (Hata veren yer burasıydı)
-    const formData = new FormData(formElement); 
-    const data = Object.fromEntries(formData.entries());
+    setLoading(true);
 
-    // 5. Supabase ve API işlemleri...
-    const { error: supabaseError } = await supabase
-      .from('franchise_applications')
-      .insert([data]);
+    try {
+      const captchaToken = await executeRecaptcha('franchise_application');
+      const formData = new FormData(formElement); 
+      const data = Object.fromEntries(formData.entries());
 
-    if (supabaseError) throw new Error("Veritabanı hatası: " + supabaseError.message);
+      // NOT: Veritabanına gönderirken formatlı bütçeyi temizlemek istersen 
+      // data.min_investment = minBudget.replace(/\./g, ""); gibi eklemeler yapabilirsin.
 
-    const mailRes = await fetch('/api/send', {
-      method: 'POST',
-      body: JSON.stringify({ ...data, captchaToken }), 
-      headers: { 'Content-Type': 'application/json' }
-    });
+      const { error: supabaseError } = await supabase
+        .from('franchise_applications')
+        .insert([data]);
 
-    const result = await mailRes.json();
-    if (!mailRes.ok) throw new Error(result.error || "Güvenlik doğrulaması başarısız.");
+      if (supabaseError) throw new Error("Veritabanı hatası: " + supabaseError.message);
 
-    // 6. BAŞARILI SONUÇ
-    setIsSubmitted(true);
-    formElement.reset(); 
-    setIsKvkkChecked(false);
+      const mailRes = await fetch('/api/send', {
+        method: 'POST',
+        body: JSON.stringify({ ...data, captchaToken }), 
+        headers: { 'Content-Type': 'application/json' }
+      });
 
-  } catch (error: any) {
-    console.error("Form Hatası:", error);
-    alert(error.message);
-  } finally {
-    setLoading(false);
-  }
-};
+      const result = await mailRes.json();
+      if (!mailRes.ok) throw new Error(result.error || "Güvenlik doğrulaması başarısız.");
+
+      setIsSubmitted(true);
+      formElement.reset(); 
+      setIsKvkkChecked(false);
+      setMinBudget(""); // State'leri temizle
+      setMaxBudget("");
+
+    } catch (error: any) {
+      console.error("Form Hatası:", error);
+      alert(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleCheckboxClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -85,6 +111,19 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   const handleCancel = () => {
     setIsKvkkChecked(false);
     setIsModalOpen(false);
+  };
+
+  const formatCurrency = (value: string) => {
+    if (!value) return "";
+    const amount = value.replace(/\D/g, "");
+    return amount.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  };
+
+  const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMinBudget(formatCurrency(e.target.value));
+  };
+  const handleMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMaxBudget(formatCurrency(e.target.value));
   };
 
   return (
@@ -118,86 +157,132 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
             </button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <label className="text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Adınız Soyadınız</label>
-              <input name="full_name" required type="text" className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-white focus:border-brand-yellow outline-none transition-all placeholder:text-xs md:placeholder:text-sm" placeholder="Örn: Ahmet Yılmaz" />
-            </div>
+<form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+  {/* Ad Soyad */}
+  <div className="space-y-2">
+    <label className="text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Adınız Soyadınız</label>
+    <input name="full_name" required type="text" className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-white focus:border-brand-yellow outline-none transition-all placeholder:text-xs md:placeholder:text-sm" placeholder="Örn: Ahmet Yılmaz" />
+  </div>
 
-            <div className="space-y-2">
-              <label className="text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">E-Posta Adresi</label>
-              <input name="email" required type="email" className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-white focus:border-brand-yellow outline-none transition-all placeholder:text-xs md:placeholder:text-sm" placeholder="ahmet@mail.com" />
-            </div>
+  {/* E-Posta */}
+  <div className="space-y-2">
+    <label className="text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">E-Posta Adresi</label>
+    <input name="email" required type="email" className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-white focus:border-brand-yellow outline-none transition-all placeholder:text-xs md:placeholder:text-sm" placeholder="ahmet@mail.com" />
+  </div>
 
-            <div className="space-y-2">
-              <label className="text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Telefon</label>
-              <input name="phone" required type="tel" className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-white focus:border-brand-yellow outline-none transition-all placeholder:text-xs md:placeholder:text-sm" placeholder="05xx xxx xx xx" />
-            </div>
+  {/* Telefon */}
+  <div className="space-y-2">
+    <label className="text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Telefon</label>
+    <input name="phone" required type="tel" className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-white focus:border-brand-yellow outline-none transition-all placeholder:text-xs md:placeholder:text-sm" placeholder="05xx xxx xx xx" />
+  </div>
 
-            <div className="space-y-2">
-              <label className="text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Yatırım Yapılacak Şehir</label>
-              <input name="city" required type="text" className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-white focus:border-brand-yellow outline-none transition-all placeholder:text-xs md:placeholder:text-sm" placeholder="Örn: İzmir" />
-            </div>
+  {/* Konsept Tercihi */}
+  <div className="space-y-2">
+    <label className="text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Konsept Tercihi</label>
+    <div className="relative">
+      <select 
+        name="concept_type" 
+        required
+        className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-gray-400 focus:border-brand-yellow focus:text-white outline-none transition-all appearance-none cursor-pointer text-xs md:text-sm"
+        onChange={(e) => {
+          if(e.target.value !== "") e.target.classList.add("text-white");
+          else e.target.classList.remove("text-white");
+        }}
+      >
+        <option value="" className="bg-black">Konsept Türünüzü Seçiniz</option>
+        <option value="alkollü" className="bg-black text-white">Alkollü</option>
+        <option value="alkolsüz" className="bg-black text-white">Alkolsüz</option>
+      </select>
+    </div>
+  </div>
 
-            <div className="space-y-2">
-              <label className="text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Yatırım Bütçesi</label>
-              <select name="investment_amount" className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-gray-400 focus:border-brand-yellow outline-none transition-all appearance-none cursor-pointer text-xs md:text-sm">
-                <option value="" className="bg-black">Bütçe Aralığı Seçiniz</option>
-                <option value="1M-2.5M" className="bg-black text-white">1.000.000 TL - 2.500.000 TL</option>
-                <option value="2.5M-5M" className="bg-black text-white">2.500.000 TL - 5.000.000 TL</option>
-                <option value="5M+" className="bg-black text-white">5.000.000 TL ve Üzeri</option>
-              </select>
-            </div>
+  {/* ÜLKE - ŞEHİR - İLÇE GRUBU */}
+<div className="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="space-y-2">
+      <label className="text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Ülke</label>
+      <select required name="country" value={selectedCountry} onChange={(e) => setSelectedCountry(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-white outline-none transition-all text-xs appearance-none cursor-pointer">
+        {countries.map(c => <option key={c.isoCode} value={c.isoCode} className="bg-black">{c.name}</option>)}
+      </select>
+    </div>
 
-            <div className="space-y-2">
-              <label className="text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Konsept Tercihi</label>
-              <select name="concept_type" className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-gray-400 focus:border-brand-yellow outline-none transition-all appearance-none cursor-pointer text-xs md:text-sm">
-                <option value="" className="bg-black">Konsept Türünüzü Seçiniz</option>
-                <option value="alkollü" className="bg-black text-white">Alkollü</option>
-                <option value="alkolsüz" className="bg-black text-white">Alkolsüz</option>
-              </select>
-            </div>
+    <div className="space-y-2">
+      <label className="text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Şehir</label>
+      <select required name="city" value={selectedCity} onChange={(e) => setSelectedCity(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-white outline-none transition-all text-xs appearance-none cursor-pointer">
+        <option value="" className="bg-black text-gray-400">Şehir Seçiniz</option>
+        {states.map(s => <option key={s.isoCode} value={s.isoCode} className="bg-black text-white">{s.name}</option>)}
+      </select>
+    </div>
 
-            <div className="md:col-span-2 space-y-2">
-              <label className="text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Eklemek İstediğiniz Notlar</label>
-              <textarea name="message" rows={4} className="w-full bg-white/5 border border-white/10 rounded-[30px] py-5 px-8 text-white focus:border-brand-yellow outline-none transition-all resize-none placeholder:text-xs md:placeholder:text-sm" placeholder="Mesajınız..."></textarea>
-            </div>
+    <div className="space-y-2">
+      <label className="text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">İlçe</label>
+      <select required name="district" value={selectedDistrict} onChange={(e) => setSelectedDistrict(e.target.value)} disabled={!selectedCity} className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-white outline-none transition-all text-xs appearance-none cursor-pointer disabled:opacity-30">
+        <option value="" className="bg-black text-gray-400">İlçe Seçiniz</option>
+        {districts.map(d => <option key={d.name} value={d.name} className="bg-black text-white">{d.name}</option>)}
+      </select>
+    </div>
+  </div>
 
-            <div className="md:col-span-2 flex items-center space-x-3 px-4 md:px-4 py-2">
-              <input 
-                required 
-                type="checkbox" 
-                id="kvkk"
-                checked={isKvkkChecked}
-                onClick={handleCheckboxClick}
-                onChange={() => {}} 
-                className="mt-1 w-4 h-4 md:w-5 md:h-5 accent-brand-yellow cursor-pointer flex-shrink-0" 
-              />
-              <label 
-                htmlFor="kvkk" 
-                onClick={handleCheckboxClick}
-                className="text-[10px] md:text-xs text-gray-500 leading-tight cursor-pointer select-none"
-              >
-                <span className="text-brand-yellow underline hover:text-white transition-colors mr-1 cursor-pointer">
-                  KVKK Aydınlatma Metni'ni
-                </span>
-                okudum ve verilerimin işlenmesini onaylıyorum.
-              </label>
-            </div>
+  {/* Bütçe Alanı */}
+  <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-7 gap-4">
+    <div className="md:col-span-3 space-y-2">
+      <label className="text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Min. Bütçe</label>
+      <input required name="min_investment" type="text" value={minBudget} onChange={handleMinChange} className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-white focus:border-brand-yellow outline-none transition-all text-sm" placeholder="Örn: 1.000.000" />
+    </div>
+    <div className="md:col-span-3 space-y-2">
+      <label className="text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Max. Bütçe</label>
+      <input required name="max_investment" type="text" value={maxBudget} onChange={handleMaxChange} className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-white focus:border-brand-yellow outline-none transition-all text-sm" placeholder="Örn: 5.000.000" />
+    </div>
+    <div className="md:col-span-1 space-y-2">
+      <label className="text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold text-center block">Birim</label>
+      <select name="currency" value={currency} onChange={(e) => setCurrency(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-2 text-white outline-none appearance-none cursor-pointer text-center font-bold">
+        <option value="₺" className="bg-black text-white text-lg">₺</option>
+        <option value="$" className="bg-black text-white text-lg">$</option>
+        <option value="€" className="bg-black text-white text-lg">€</option>
+      </select>
+    </div>
+  </div>
 
-            {/* NOT: v3'te buradaki ReCAPTCHA kutusu silindi, her şey butona basınca arka planda çalışıyor. */}
+  {/* Mesaj */}
+  <div className="md:col-span-2 space-y-2">
+    <label className="text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Eklemek İstediğiniz Notlar</label>
+    <textarea name="message" rows={4} className="w-full bg-white/5 border border-white/10 rounded-[30px] py-5 px-8 text-white focus:border-brand-yellow outline-none transition-all resize-none placeholder:text-xs md:placeholder:text-sm" placeholder="Mesajınız..."></textarea>
+  </div>
 
-            <div className="md:col-span-2 mt-4">
-              <button 
-                type="submit" 
-                disabled={loading}
-                className="w-full bg-brand-yellow hover:bg-white text-black font-black py-5 rounded-full transition-all duration-300 flex items-center justify-center space-x-3 text-lg uppercase tracking-tighter disabled:opacity-50"
-              >
-                <span>{loading ? "GÖNDERİLİYOR..." : "BAŞVURUYU GÖNDER"}</span>
-                <Send size={20} />
-              </button>
-            </div>
-          </form>
+  {/* KVKK */}
+  <div className="md:col-span-2 flex items-center space-x-3 px-4 md:px-4 py-2">
+    <input 
+      required 
+      type="checkbox" 
+      id="kvkk"
+      checked={isKvkkChecked}
+      onClick={handleCheckboxClick}
+      onChange={() => {}} 
+      className="mt-1 w-4 h-4 md:w-5 md:h-5 accent-brand-yellow cursor-pointer flex-shrink-0" 
+    />
+    <label 
+      htmlFor="kvkk" 
+      onClick={handleCheckboxClick}
+      className="text-[10px] md:text-xs text-gray-500 leading-tight cursor-pointer select-none"
+    >
+      <span className="text-brand-yellow underline hover:text-white transition-colors mr-1 cursor-pointer">
+        KVKK Aydınlatma Metni'ni
+      </span>
+      okudum ve verilerimin işlenmesini onaylıyorum.
+    </label>
+  </div>
+
+  {/* Submit Button */}
+  <div className="md:col-span-2 mt-4">
+    <button 
+      type="submit" 
+      disabled={loading}
+      className="w-full bg-brand-yellow hover:bg-white text-black font-black py-5 rounded-full transition-all duration-300 flex items-center justify-center space-x-3 text-lg uppercase tracking-tighter disabled:opacity-50"
+    >
+      <span>{loading ? "GÖNDERİLİYOR..." : "BAŞVURUYU GÖNDER"}</span>
+      <Send size={20} />
+    </button>
+  </div>
+</form>
         )}
       </div>
 

@@ -10,14 +10,18 @@ export async function POST(request: Request) {
       full_name, 
       email, 
       phone, 
-      city, 
-      investment_amount, 
+      country,       // Yeni: Ülke kodu
+      city,          // Yeni: Şehir kodu
+      district,      // Yeni: İlçe adı
+      min_investment,// Yeni: Min Bütçe
+      max_investment,// Yeni: Max Bütçe
+      currency,      // Yeni: Para Birimi
       concept_type, 
       message,
-      captchaToken // Frontend'den gelen token'ı yakalıyoruz
+      captchaToken 
     } = body;
 
-    // 1. ADIM: reCAPTCHA v3 Doğrulaması (E-posta göndermeden ÖNCE yapılmalı)
+    // 1. ADIM: reCAPTCHA v3 Doğrulaması
     const recaptchaResponse = await fetch(
       `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${captchaToken}`,
       { method: "POST" }
@@ -25,7 +29,6 @@ export async function POST(request: Request) {
 
     const recaptchaData = await recaptchaResponse.json();
 
-    // v3 Puan Kontrolü (0.5 ve üzeri genellikle güvenlidir)
     if (!recaptchaData.success || (recaptchaData.score !== undefined && recaptchaData.score < 0.5)) {
       return NextResponse.json({ 
         error: "Güvenlik doğrulaması başarısız. Bot algılandı.",
@@ -37,34 +40,43 @@ export async function POST(request: Request) {
     const mailData = await resend.emails.send({
       from: 'Burgo Jr. Franchise <onboarding@resend.dev>', 
       to: ['kralisandavic16@gmail.com'],
-      subject: `YENİ FRANCHISE BAŞVURUSU: ${full_name} (${city})`,
+      subject: `YENİ FRANCHISE BAŞVURUSU: ${full_name} (${district} / ${city})`,
       html: `
-        <div style="font-family: sans-serif; max-width: 600px; border: 1px solid #eee; padding: 20px;">
-          <h2 style="color: #fdbf1f; text-transform: uppercase;">🍔 Yeni Franchise Başvurusu</h2>
-          <hr />
-          <p><strong>Aday Bilgileri:</strong></p>
-          <ul style="list-style: none; padding: 0;">
-            <li><strong>Ad Soyad:</strong> ${full_name}</li>
-            <li><strong>E-posta:</strong> <a href="mailto:${email}">${email}</a></li>
-            <li><strong>Telefon:</strong> <a href="tel:${phone}">${phone}</a></li>
-            <li><strong>Şehir:</strong> ${city}</li>
-          </ul>
+        <div style="font-family: sans-serif; max-width: 600px; border: 1px solid #eee; padding: 20px; border-radius: 12px; color: #333;">
+          <h2 style="color: #fdbf1f; text-transform: uppercase; margin-bottom: 5px;">🍔 Yeni Franchise Başvurusu</h2>
+          <p style="color: #666; font-size: 14px; margin-top: 0;">Web sitesi üzerinden yeni bir aday formu iletildi.</p>
+          <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
           
-          <hr />
-          <p><strong>Yatırım Detayları:</strong></p>
-          <ul style="list-style: none; padding: 0;">
-            <li><strong>Bütçe Aralığı:</strong> ${investment_amount || 'Belirtilmedi'}</li>
-            <li><strong>Konsept Tercihi:</strong> ${concept_type || 'Belirtilmedi'}</li>
-          </ul>
+          <h3 style="font-size: 16px; color: #fdbf1f;">👤 Aday Bilgileri</h3>
+          <table style="width: 100%; font-size: 14px; border-collapse: collapse;">
+            <tr><td style="padding: 5px 0; width: 120px;"><strong>Ad Soyad:</strong></td><td>${full_name}</td></tr>
+            <tr><td style="padding: 5px 0;"><strong>E-posta:</strong></td><td><a href="mailto:${email}" style="color: #007bff; text-decoration: none;">${email}</a></td></tr>
+            <tr><td style="padding: 5px 0;"><strong>Telefon:</strong></td><td><a href="tel:${phone}" style="color: #007bff; text-decoration: none;">${phone}</a></td></tr>
+          </table>
 
-          <hr />
-          <p><strong>Başvuru Notu:</strong></p>
-          <div style="background: #f9f9f9; padding: 15px; border-radius: 8px;">
-            ${message || 'Not eklenmedi.'}
+          <h3 style="font-size: 16px; color: #fdbf1f; margin-top: 25px;">📍 Lokasyon Tercihi</h3>
+          <table style="width: 100%; font-size: 14px; border-collapse: collapse;">
+            <tr><td style="padding: 5px 0; width: 120px;"><strong>Ülke:</strong></td><td>${country}</td></tr>
+            <tr><td style="padding: 5px 0;"><strong>Şehir:</strong></td><td>${city}</td></tr>
+            <tr><td style="padding: 5px 0;"><strong>İlçe:</strong></td><td>${district}</td></tr>
+          </table>
+          
+          <h3 style="font-size: 16px; color: #fdbf1f; margin-top: 25px;">💰 Yatırım ve Konsept</h3>
+          <table style="width: 100%; font-size: 14px; border-collapse: collapse;">
+            <tr><td style="padding: 5px 0; width: 120px;"><strong>Bütçe Aralığı:</strong></td><td>${min_investment || '0'} ${currency} - ${max_investment || '0'} ${currency}</td></tr>
+            <tr><td style="padding: 5px 0;"><strong>Konsept:</strong></td><td style="text-transform: capitalize;">${concept_type || 'Belirtilmedi'}</td></tr>
+          </table>
+
+          <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;" />
+          
+          <h3 style="font-size: 16px; color: #fdbf1f;">📝 Başvuru Notu</h3>
+          <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; font-size: 14px; line-height: 1.6; border: 1px solid #f0f0f0;">
+            ${message?.replace(/\n/g, '<br/>') || 'Not eklenmedi.'}
           </div>
 
-          <p style="font-size: 11px; color: #aaa; margin-top: 30px;">
-            Bu başvuru reCAPTCHA v3 ile doğrulanmıştır (Güven Skoru: ${recaptchaData.score}).
+          <p style="font-size: 11px; color: #aaa; margin-top: 40px; text-align: center; border-top: 1px solid #eee; padding-top: 10px;">
+            Bu başvuru reCAPTCHA v3 ile doğrulanmıştır. (Güven Skoru: ${recaptchaData.score})<br/>
+            IP Adresi üzerinden bot kontrolü yapılmıştır.
           </p>
         </div>
       `
