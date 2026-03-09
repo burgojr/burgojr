@@ -11,16 +11,22 @@ const Footer = () => {
         {/* 3 Sütunlu Yapı */}
         <div className="grid grid-cols-1 md:grid-cols-3 border border-brand-yellow/30 rounded-sm divide-y md:divide-y-0 md:divide-x divide-brand-yellow/30">
           
-          {/* 1. Sütun: Açılış Saatleri */}
-          <div className="flex items-center p-6 md:p-8">
-            <div className="text-brand-yellow text-2xl md:text-3xl mr-6">
-              <FaPhoneAlt />
-            </div>
-            <div>
-              <h4 className="text-sm md:text-lg font-bold mb-1 tracking-tight">Açılış Saatleri</h4>
-              <p className="text-gray-400 font-mono text-xs md:text-sm tracking-widest">08.30 – 01.00</p>
-            </div>
-          </div>
+          {/* 1. Sütun: İletişim Bilgisi */}
+<div className="flex items-center p-6 md:p-8">
+  <div className="text-brand-yellow text-2xl md:text-3xl mr-6">
+    <FaPhoneAlt />
+  </div>
+  <div>
+    <h4 className="text-sm md:text-lg font-bold mb-1 tracking-tight">İletişim</h4>
+    {/* href="tel:..." kısmı arama ekranını tetikler */}
+    <a 
+      href="tel:+905300710745" 
+      className="text-gray-400 hover:text-white font-mono text-xs md:text-sm tracking-widest transition-colors"
+    >
+      0530 071 07 45
+    </a>
+  </div>
+</div>
 
           {/* 2. Sütun: Adres ve Harita Bilgisi */}
           <div className="flex flex-col p-6 md:p-8 space-y-4">
@@ -74,11 +80,11 @@ const Footer = () => {
         </div>
 
         {/* Telif Hakkı */}
-        <div className="mt-12 text-center">
-          <p className="text-[10px] md:text-xs tracking-[0.2em] md:tracking-[0.4em] font-black uppercase text-gray-500">
-            © 2026 <span className="text-brand-yellow">BURGO Jr.</span> - TÜM HAKLARI SAKLIDIR
-          </p>
-        </div>
+<div className="mt-12 text-center">
+  <p className="text-[10px] md:text-xs tracking-[0.2em] md:tracking-[0.4em] font-black uppercase text-gray-500">
+    © Copyright {new Date().getFullYear()} <span className="text-brand-yellow">BURGO Jr.</span> - TÜM HAKLARI SAKLIDIR
+  </p>
+</div>
       </div>
     </footer>
   );
