@@ -1,5 +1,6 @@
 import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
+import { State } from 'country-state-city';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -10,16 +11,20 @@ export async function POST(request: Request) {
       full_name, 
       email, 
       phone, 
-      country,       // Yeni: Ülke kodu
-      city,          // Yeni: Şehir kodu
-      district,      // Yeni: İlçe adı
-      min_investment,// Yeni: Min Bütçe
-      max_investment,// Yeni: Max Bütçe
-      currency,      // Yeni: Para Birimi
+      country, 
+      city, // Burası plaka kodu (isoCode)
+      district, 
+      min_investment,
+      max_investment,
+      currency, 
       concept_type, 
       message,
       captchaToken 
     } = body;
+
+    // Şehir ismini plaka kodundan çözme
+    const stateDetails = State.getStateByCodeAndCountry(city, country);
+    const cityName = stateDetails ? stateDetails.name : city;
 
     // 1. ADIM: reCAPTCHA v3 Doğrulaması
     const recaptchaResponse = await fetch(
@@ -40,7 +45,7 @@ export async function POST(request: Request) {
     const mailData = await resend.emails.send({
       from: 'Burgo Jr. Franchise <onboarding@resend.dev>', 
       to: ['kralisandavic16@gmail.com'],
-      subject: `YENİ FRANCHISE BAŞVURUSU: ${full_name} (${district} / ${city})`,
+      subject: `YENİ FRANCHISE BAŞVURUSU: ${full_name} (${district} / ${cityName})`,
       html: `
         <div style="font-family: sans-serif; max-width: 600px; border: 1px solid #eee; padding: 20px; border-radius: 12px; color: #333;">
           <h2 style="color: #fdbf1f; text-transform: uppercase; margin-bottom: 5px;">🍔 Yeni Franchise Başvurusu</h2>
@@ -57,7 +62,7 @@ export async function POST(request: Request) {
           <h3 style="font-size: 16px; color: #fdbf1f; margin-top: 25px;">📍 Lokasyon Tercihi</h3>
           <table style="width: 100%; font-size: 14px; border-collapse: collapse;">
             <tr><td style="padding: 5px 0; width: 120px;"><strong>Ülke:</strong></td><td>${country}</td></tr>
-            <tr><td style="padding: 5px 0;"><strong>Şehir:</strong></td><td>${city}</td></tr>
+            <tr><td style="padding: 5px 0;"><strong>Şehir:</strong></td><td>${cityName}</td></tr>
             <tr><td style="padding: 5px 0;"><strong>İlçe:</strong></td><td>${district}</td></tr>
           </table>
           
@@ -75,8 +80,7 @@ export async function POST(request: Request) {
           </div>
 
           <p style="font-size: 11px; color: #aaa; margin-top: 40px; text-align: center; border-top: 1px solid #eee; padding-top: 10px;">
-            Bu başvuru reCAPTCHA v3 ile doğrulanmıştır. (Güven Skoru: ${recaptchaData.score})<br/>
-            IP Adresi üzerinden bot kontrolü yapılmıştır.
+            Bu başvuru reCAPTCHA v3 ile doğrulanmıştır. (Güven Skoru: ${recaptchaData.score})
           </p>
         </div>
       `

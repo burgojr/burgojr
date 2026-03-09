@@ -45,7 +45,7 @@ const FranchiseForm = () => {
     }
   }, [selectedCity, selectedCountry]);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formElement = e.currentTarget; 
 
@@ -66,33 +66,35 @@ const FranchiseForm = () => {
       const formData = new FormData(formElement); 
       const data = Object.fromEntries(formData.entries());
 
-      // NOT: Veritabanına gönderirken formatlı bütçeyi temizlemek istersen 
-      // data.min_investment = minBudget.replace(/\./g, ""); gibi eklemeler yapabilirsin.
-
+      // 1. Supabase'e kayıt
       const { error: supabaseError } = await supabase
         .from('franchise_applications')
-        .insert([data]);
+        .insert([{ ...data }]);
 
       if (supabaseError) throw new Error("Veritabanı hatası: " + supabaseError.message);
 
+      // 2. Sadece API'ye gönderim (HTML hatası almamak için sonucu JSON olarak bekle)
       const mailRes = await fetch('/api/send', {
         method: 'POST',
         body: JSON.stringify({ ...data, captchaToken }), 
         headers: { 'Content-Type': 'application/json' }
       });
 
-      const result = await mailRes.json();
-      if (!mailRes.ok) throw new Error(result.error || "Güvenlik doğrulaması başarısız.");
+      // API yanıtını kontrol et
+      if (!mailRes.ok) {
+        const errorData = await mailRes.text(); // JSON değilse bile hatayı yakala
+        throw new Error("Mail gönderimi başarısız oldu.");
+      }
 
       setIsSubmitted(true);
       formElement.reset(); 
       setIsKvkkChecked(false);
-      setMinBudget(""); // State'leri temizle
+      setMinBudget(""); 
       setMaxBudget("");
 
     } catch (error: any) {
       console.error("Form Hatası:", error);
-      alert(error.message);
+      alert("Bir hata oluştu: " + error.message);
     } finally {
       setLoading(false);
     }
@@ -207,7 +209,12 @@ const FranchiseForm = () => {
 
     <div className="space-y-2">
       <label className="text-xs uppercase tracking-widest text-gray-500 ml-4 font-bold">Şehir</label>
-      <select required name="city" value={selectedCity} onChange={(e) => setSelectedCity(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-white outline-none transition-all text-xs appearance-none cursor-pointer">
+      <select 
+        name="city" 
+        required 
+        value={selectedCity} 
+        onChange={(e) => setSelectedCity(e.target.value)}
+        className="w-full bg-white/5 border border-white/10 rounded-full py-4 px-6 text-white outline-none transition-all text-xs appearance-none cursor-pointer">
         <option value="" className="bg-black text-gray-400">Şehir Seçiniz</option>
         {states.map(s => <option key={s.isoCode} value={s.isoCode} className="bg-black text-white">{s.name}</option>)}
       </select>
