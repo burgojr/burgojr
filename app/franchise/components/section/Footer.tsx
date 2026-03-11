@@ -81,7 +81,7 @@ const Footer = () => {
         {/* Telif Hakkı */}
 <div className="mt-12 text-center">
   <p className="text-[10px] md:text-xs tracking-[0.2em] md:tracking-[0.4em] font-black uppercase text-gray-500">
-    © Copyright {new Date().getFullYear()} <span className="text-brand-yellow">BURGO Jr.</span> - TÜM HAKLARI SAKLIDIR
+    © COPYRIGHT {new Date().getFullYear()} <span className="text-brand-yellow">BURGO Jr.</span> - TÜM HAKLARI SAKLIDIR
   </p>
 </div>
       </div>
